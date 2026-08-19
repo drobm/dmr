@@ -255,24 +255,40 @@ function leadCaptureForm() {
   </div>`;
 }
 
+/* The same header the marketing pages render, so moving between /
+   and /relief-plan doesn't feel like crossing into a different site.
+   The section links point back at the home page's anchors because
+   those sections don't exist on this page. */
 function header() {
-  return `<header class="bg-neutral-900 sticky top-0 z-20">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3" aria-label="Dynamic Muscle Recovery — home">
-        <svg viewBox="0 0 48 48" class="w-10 h-10" aria-hidden="true">
+  const account = state.profile
+    ? `<button data-action="goto-myplans" class="nav-cta">My Plans (${state.savedPlans.length}/${MAX_SAVED_PLANS})</button>`
+    : `<button data-action="goto-login" class="nav-cta">Log In</button>`;
+
+  return `<header class="site-header">
+    <div class="site-nav">
+      <a href="/" class="brand" aria-label="Dynamic Muscle Recovery — home">
+        <svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true">
           <polygon points="24,3 43,13.5 43,34.5 24,45 5,34.5 5,13.5" fill="#facc15"></polygon>
           <polygon points="24,7 39.5,15.5 39.5,32.5 24,41 8.5,32.5 8.5,15.5" fill="#171717"></polygon>
-          <text x="24" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#facc15" font-family="Georgia, serif">DMR</text>
+          <text x="24" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#facc15" font-family="Georgia,serif">DMR</text>
         </svg>
-        <span class="text-white font-bold text-lg tracking-tight">Pain Relief Guide</span>
+        <span>Dynamic Muscle Recovery</span>
       </a>
-      <div class="flex items-center gap-3">
-        <a href="${esc(SOCIAL.instagram)}" target="_blank" rel="noreferrer" aria-label="Instagram" class="text-neutral-400 hover:text-yellow-400 transition-colors">${icon("Instagram", "w-5 h-5")}</a>
-        <a href="${esc(SOCIAL.tiktok)}" target="_blank" rel="noreferrer" aria-label="TikTok" class="text-neutral-400 hover:text-yellow-400 transition-colors">${TIKTOK_ICON("w-5 h-5")}</a>
-        ${state.profile
-          ? `<button data-action="goto-myplans" class="bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-bold text-sm px-4 py-2 rounded-lg transition-colors">My Plans (${state.savedPlans.length}/${MAX_SAVED_PLANS})</button>`
-          : `<button data-action="goto-login" class="bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-bold text-sm px-4 py-2 rounded-lg transition-colors">Log In</button>`}
-      </div>
+      <button class="menu-btn" aria-label="Open menu" data-action="toggle-menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      </button>
+      <ul class="nav-links" id="navlinks">
+        <li><a href="/#how">How it works</a></li>
+        <li><a href="/#services">Work with me</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#faq">FAQ</a></li>
+        <li><a href="/inquiry">Contact</a></li>
+        <li class="nav-social">
+          <a href="${esc(SOCIAL.instagram)}" target="_blank" rel="noreferrer" aria-label="Instagram">${icon("Instagram", "")}</a>
+          <a href="${esc(SOCIAL.tiktok)}" target="_blank" rel="noreferrer" aria-label="TikTok">${TIKTOK_ICON("")}</a>
+        </li>
+        <li>${account}</li>
+      </ul>
     </div>
   </header>`;
 }
@@ -528,6 +544,15 @@ const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
    ACTIONS
    ------------------------------------------------------------ */
 const actions = {
+  /* Deliberately does not call render(): the open state lives on the
+     DOM node, and a re-render would rebuild the header and shut the
+     menu again the instant it opened. It resets on navigation, which
+     is what you want anyway. */
+  "toggle-menu": () => {
+    const ul = document.getElementById("navlinks");
+    if (ul) ul.classList.toggle("open");
+  },
+
   "set-view": (el) => { state.view = el.dataset.view; state.hovered = null; render(); },
 
   "toggle-area": (el) => {

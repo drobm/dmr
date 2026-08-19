@@ -32,6 +32,42 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 input, textarea { font: inherit; }
 h1, h2, h3, h4 { font-family: Archivo, Inter, sans-serif; font-size: inherit; font-weight: inherit; }
 
+/* ============================================================
+   SITE HEADER — kept identical to the marketing pages so the
+   guide doesn't read as a different website. Values are copied
+   from the <style> block in public/index.html; if you restyle
+   the nav there, mirror the change here.
+   ============================================================ */
+.site-header { position: sticky; top: 0; z-index: 50; background: #171717; box-shadow: 0 1px 0 rgba(250,204,21,.15); }
+.site-nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; max-width: 1100px; margin: 0 auto; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand span { color: #fff; font-family: Archivo, Inter, sans-serif; font-weight: 800; font-size: 18px; letter-spacing: -.01em; }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { color: #d6d3d1; text-decoration: none; font-size: 14px; font-weight: 600; transition: color .15s; }
+.nav-links a:hover { color: #facc15; }
+.nav-cta { background: #facc15; color: #171717; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 14px; }
+.nav-cta:hover { background: #eab308; }
+.menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+.menu-btn svg { width: 26px; height: 26px; stroke: #fff; }
+.nav-social { display: flex; align-items: center; gap: 14px; }
+.nav-social a { color: #a3a3a3; }
+.nav-social a:hover { color: #facc15; }
+.nav-social svg { width: 20px; height: 20px; }
+
+/* Same 860px breakpoint the marketing pages use, so the nav
+   collapses into the hamburger at the identical width.
+   .nav-links positions against .site-header (sticky = positioned),
+   which is what makes the dropdown span the full width. */
+@media (max-width: 860px) {
+  .nav-links {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    background: #171717; flex-direction: column; align-items: flex-start;
+    padding: 18px 24px; gap: 18px; border-bottom: 1px solid rgba(250,204,21,.2);
+  }
+  .nav-links.open { display: flex; }
+  .menu-btn { display: block; }
+}
+
 /* ---------- layout ---------- */
 .relative { position: relative; }
 .absolute { position: absolute; }
@@ -211,14 +247,11 @@ button:disabled { cursor:default; }
   .sm\:w-auto { width: auto; }
 }
 
-/* On a 375px iPhone the wordmark and the "My Plans (n/2)" button
-   both wrap, doubling the sticky header's height to ~10% of the
-   viewport. Keep them on one line and step the wordmark down one
-   size — same typeface, weight and colors, just a responsive
-   scale so the header stays a single row. */
-@media (max-width: 400px) {
-  header .max-w-5xl { gap: .5rem; }
-  header > div > div { gap: .5rem; }
-  header span.text-lg { font-size: 1rem; white-space: nowrap; }
-  header button { white-space: nowrap; }
+/* Below ~380px the wordmark alone can crowd the hamburger, so step
+   it down slightly. The old rules here targeted the guide's former
+   bespoke header and are gone — the shared .site-header above now
+   handles mobile via the same hamburger the marketing pages use. */
+@media (max-width: 380px) {
+  .brand span { font-size: 16px; }
+  .site-nav { padding: 14px 16px; }
 }
