@@ -199,6 +199,15 @@ of being emailed.
 
 It is not deployed and has no effect on the live site.
 
+> **If you use an AI coding tool with a built-in preview launcher:** it
+> may not be able to start this server for you. On this Mac, that
+> launcher runs without permission to read `~/Documents`, so it fails
+> with `Operation not permitted` on any file in this project — the
+> script and the site files alike. Start the server yourself with the
+> command above and point the preview at `http://localhost:8000`
+> instead. This is a macOS privacy setting, not a problem with the
+> project.
+
 ---
 
 ## Project layout
