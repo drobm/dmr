@@ -80,8 +80,11 @@ header{position:sticky;top:0;z-index:50;background:var(--ink);box-shadow:0 1px 0
    mid-word. Anchor it to the figure's right edge below 520px; desktop
    positioning is untouched. */
 @media (max-width:520px){
-  .pin-label{font-size:10px;padding:4px 8px;max-width:calc(100% - 12px)}
-  .pin-label.dark{left:auto;right:6px}
+  .pin-label{font-size:10px;padding:4px 8px}
+  /* !important is needed: the element carries an inline left:74%, and
+     without overriding it both edges end up pinned, squeezing the box
+     narrower than its own nowrap text. */
+  .pin-label.dark{left:auto!important;right:6px}
 }
 @media (prefers-reduced-motion:reduce){.pin::after{animation:none}}
 
@@ -190,6 +193,7 @@ footer{background:var(--ink);color:#a8a29e;padding:48px 0 36px;font-size:14px}
       <li><a href="#services">Work with me</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#faq">FAQ</a></li>
+      <li><a href="/inquiry">Contact</a></li>
       <li><a class="nav-cta" href="/relief-plan">Start Your Plan</a></li>
     </ul>
   </nav>
