@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Here — Dynamic Muscle Recovery</title>
+<meta name="description" content="Tell me where it hurts and what you've tried. I'll take it from there.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#171717;
+    --gold:#facc15;
+    --stone:#fafaf9;
+    --stone-200:#e7e5e4;
+    --stone-400:#a8a29e;
+    --stone-600:#57534e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--stone);color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .bar{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 20px;background:var(--ink);color:#fff;
+  }
+  .bar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
+  .bar .brand span{font-family:'Archivo',sans-serif;font-weight:700;font-size:14px}
+  .bar a.back{
+    margin-left:auto;color:var(--stone-400);font-size:13px;text-decoration:none;
+  }
+  .bar a.back:hover{color:var(--gold)}
+
+  .wrap{max-width:880px;margin:0 auto;padding:48px 20px 80px}
+  .head{margin-bottom:36px;max-width:640px}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--stone-600);margin-bottom:12px}
+  h1{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1.1;letter-spacing:-.01em;margin-bottom:14px}
+  h1 em{font-style:normal;color:var(--gold);-webkit-text-stroke:1px var(--ink)}
+  .head p{font-size:15.5px;line-height:1.65;color:var(--stone-600)}
+
+  .card{
+    background:#fff;border:1px solid var(--stone-200);border-radius:20px;
+    padding:44px;box-shadow:0 24px 60px -30px rgba(23,23,23,.18);
+  }
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field.full{grid-column:1/-1}
+  label{font-size:12.5px;font-weight:600;letter-spacing:.03em}
+  label .opt{color:var(--stone-400);font-weight:500}
+  input,select,textarea{
+    font:inherit;font-size:15px;color:var(--ink);
+    padding:13px 15px;border:1.5px solid var(--stone-200);border-radius:10px;
+    background:var(--stone);outline:none;transition:border-color .15s;width:100%;
+  }
+  input:focus,select:focus,textarea:focus{border-color:var(--ink)}
+  textarea{resize:vertical;min-height:96px}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2357534e' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center}
+
+  .seg{display:flex;gap:10px}
+  .seg input{display:none}
+  .seg label{
+    flex:1;text-align:center;padding:13px 10px;cursor:pointer;
+    border:1.5px solid var(--stone-200);border-radius:10px;background:var(--stone);
+    font-size:14px;font-weight:600;transition:all .15s;
+  }
+  .seg input:checked + label{background:var(--ink);color:var(--gold);border-color:var(--ink)}
+
+  .submit-row{grid-column:1/-1;margin-top:8px}
+  .submit-btn{
+    width:100%;padding:16px 20px;border:none;border-radius:10px;cursor:pointer;
+    background:var(--gold);color:var(--ink);
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;
+    transition:transform .12s,box-shadow .12s;
+  }
+  .submit-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px -10px rgba(250,204,21,.7)}
+  .submit-btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .submit-btn[disabled]{opacity:.55;cursor:wait;transform:none;box-shadow:none}
+  .fineprint{grid-column:1/-1;font-size:12px;color:var(--stone-400);line-height:1.5;text-align:center}
+
+  .error{
+    display:none;grid-column:1/-1;padding:12px 14px;border-radius:10px;
+    background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px;
+  }
+  .error.show{display:block}
+
+  /* success state */
+  .success{
+    display:none;text-align:center;padding:24px 10px;
+  }
+  .success.show{display:block}
+  .success h2{font-family:'Archivo',sans-serif;font-weight:800;font-size:26px;margin:16px 0 10px}
+  .success p{font-size:15px;line-height:1.6;color:var(--stone-600);max-width:440px;margin:0 auto 24px}
+  .success .btn{
+    display:inline-block;padding:13px 24px;border-radius:10px;text-decoration:none;
+    background:var(--ink);color:var(--gold);
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:14px;
+  }
+
+  @media (max-width:700px){
+    .grid{grid-template-columns:1fr}
+    .card{padding:30px 22px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="/">
+    <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true">
+      <polygon points="24,3 43,13.5 43,34.5 24,45 5,34.5 5,13.5" fill="#facc15"/>
+      <polygon points="24,7 39.5,15.5 39.5,32.5 24,41 8.5,32.5 8.5,15.5" fill="#171717"/>
+      <text x="24" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#facc15" font-family="Georgia,serif">DMR</text>
+    </svg>
+    <span>Dynamic Muscle Recovery</span>
+  </a>
+  <a class="back" href="/">← Back to site</a>
+</header>
+
+<main class="wrap">
+  <div class="head">
+    <p class="eyebrow">New client intake</p>
+    <h1>Tell me where it <em>hurts</em>.</h1>
+    <p>Five minutes, once. I read every intake myself, and your answers shape your first session before you ever walk in — or log on.</p>
+  </div>
+
+  <div class="card">
+    <!-- ============ FORM ============ -->
+    <div class="grid" id="intake-form">
+      <div class="field">
+        <label for="f-name">Full name</label>
+        <input type="text" id="f-name" autocomplete="name" maxlength="80">
+      </div>
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input type="text" id="f-email" autocomplete="email" inputmode="email" maxlength="120">
+      </div>
+      <div class="field">
+        <label for="f-phone">Phone <span class="opt">(optional)</span></label>
+        <input type="text" id="f-phone" autocomplete="tel" inputmode="tel" maxlength="30">
+      </div>
+      <div class="field">
+        <label for="f-area">Where's the main pain?</label>
+        <select id="f-area">
+          <option value="">Select…</option>
+          <option>Neck / upper traps</option>
+          <option>Shoulder</option>
+          <option>Upper back</option>
+          <option>Lower back</option>
+          <option>Hip / glute</option>
+          <option>Knee</option>
+          <option>Elbow / wrist</option>
+          <option>Ankle / foot</option>
+          <option>Multiple areas</option>
+          <option>Not pain — performance / mobility</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-duration">How long has it been going on?</label>
+        <select id="f-duration">
+          <option value="">Select…</option>
+          <option>Less than a month</option>
+          <option>1–6 months</option>
+          <option>6 months – 2 years</option>
+          <option>2+ years</option>
+          <option>On and off for years</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Session preference</label>
+        <div class="seg">
+          <input type="radio" name="mode" id="m-inperson" value="In-person (LA)" checked>
+          <label for="m-inperson">In-person (LA)</label>
+          <input type="radio" name="mode" id="m-virtual" value="Virtual 1:1">
+          <label for="m-virtual">Virtual 1:1</label>
+        </div>
+      </div>
+      <div class="field full">
+        <label for="f-tried">What have you already tried?</label>
+        <textarea id="f-tried" placeholder="Massage, chiro, PT, rest, stretching, YouTube rehab… what helped, what didn't?"></textarea>
+      </div>
+      <div class="field full">
+        <label for="f-goal">What does fixed look like for you?</label>
+        <textarea id="f-goal" placeholder="Deadlift without bracing for pain? Sit through meetings without your neck screaming? Sleep through the night?"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-source">How did you find DMR?</label>
+        <select id="f-source">
+          <option value="">Select…</option>
+          <option>Instagram</option>
+          <option>TikTok</option>
+          <option>Google search</option>
+          <option>Referral from a client</option>
+          <option>Referral from a trainer / practitioner</option>
+          <option>The Relief Plan app</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-times">Best days / times for you <span class="opt">(optional)</span></label>
+        <input type="text" id="f-times" placeholder="e.g. weekday mornings, Tues/Thurs after 5" maxlength="120">
+      </div>
+
+      <div class="error" id="form-error" role="alert"></div>
+
+      <div class="submit-row">
+        <button class="submit-btn" id="submit-btn" onclick="submitIntake()">Send my intake</button>
+      </div>
+      <p class="fineprint">Your info goes to Derrick only — never sold, never spammed. You'll hear back within one business day.</p>
+    </div>
+
+    <!-- ============ SUCCESS ============ -->
+    <div class="success" id="success">
+      <svg viewBox="0 0 48 48" width="52" height="52" aria-hidden="true">
+        <polygon points="24,3 43,13.5 43,34.5 24,45 5,34.5 5,13.5" fill="#facc15"/>
+        <polygon points="24,7 39.5,15.5 39.5,32.5 24,41 8.5,32.5 8.5,15.5" fill="#171717"/>
+        <text x="24" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#facc15" font-family="Georgia,serif">DMR</text>
+      </svg>
+      <h2>Got it. I'm on it.</h2>
+      <p>Check your inbox — a personal welcome from me is on its way, with next steps for booking your first session.</p>
+      <a class="btn" href="/">Back to DMR</a>
+    </div>
+  </div>
+</main>
+
+<script>
+/* =====================================================
+   INTAKE → MAKE.COM
+   Paste your Make webhook URL below (from the Webhooks
+   "Custom webhook" module in your intake scenario).
+   ===================================================== */
+const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/2t38uqbhspwcnrin18wzxj566d0rpigs";
+
+function showError(msg){
+  const el = document.getElementById("form-error");
+  el.textContent = msg; el.classList.add("show");
+  const b = document.getElementById("submit-btn");
+  b.disabled = false; b.textContent = "Send my intake";
+}
+
+async function submitIntake(){
+  const val = id => document.getElementById(id).value.trim();
+  const data = {
+    name: val("f-name"),
+    email: val("f-email"),
+    phone: val("f-phone"),
+    pain_area: val("f-area"),
+    duration: val("f-duration"),
+    session_mode: document.querySelector('input[name="mode"]:checked').value,
+    tried: val("f-tried"),
+    goal: val("f-goal"),
+    source: val("f-source"),
+    preferred_times: val("f-times"),
+    submitted_at: new Date().toISOString(),
+    form: "dmr-intake"
+  };
+
+  document.getElementById("form-error").classList.remove("show");
+
+  if(!data.name || !data.email){ showError("Name and email are required."); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){ showError("That email doesn't look right — double-check it."); return; }
+  if(!data.pain_area){ showError("Select your main pain area so I know where to start."); return; }
+  if(MAKE_WEBHOOK_URL.startsWith("PASTE-")){
+    showError("Form isn't connected yet. (Site owner: set MAKE_WEBHOOK_URL in intake.html.)");
+    return;
+  }
+
+  const btn = document.getElementById("submit-btn");
+  btn.disabled = true; btn.textContent = "Sending…";
+
+  try{
+    const res = await fetch(MAKE_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    document.getElementById("intake-form").style.display = "none";
+    document.getElementById("success").classList.add("show");
+    window.scrollTo({top:0, behavior:"smooth"});
+  }catch(err){
+    console.error(err);
+    showError("Something went wrong sending your intake. Give it another try, or email me directly.");
+  }
+}
+</script>
+</body>
+</html>

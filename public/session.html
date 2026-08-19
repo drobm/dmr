@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Session — Dynamic Muscle Recovery</title>
+<meta name="description" content="Join your virtual 1:1 precision bodywork session with Dynamic Muscle Recovery.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@daily-co/daily-js"></script>
+<style>
+  :root{
+    --ink:#171717;
+    --gold:#facc15;
+    --stone:#fafaf9;
+    --stone-200:#e7e5e4;
+    --stone-400:#a8a29e;
+    --stone-600:#57534e;
+    --room:#0c0c0c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--stone);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .display{font-family:'Archivo',sans-serif}
+
+  /* ---------- Top bar (persistent) ---------- */
+  .bar{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;gap:12px;
+    padding:12px 20px;
+    background:var(--ink);
+    color:#fff;
+  }
+  .bar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
+  .bar .brand span{font-family:'Archivo',sans-serif;font-weight:700;font-size:14px;letter-spacing:.02em}
+  .bar .session-tag{
+    margin-left:auto;display:flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--stone-400);
+  }
+  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--stone-600)}
+  .live-dot.on{background:var(--gold);box-shadow:0 0 0 4px rgba(250,204,21,.2);animation:blink 2.2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.45}}
+  @media (prefers-reduced-motion:reduce){.live-dot.on{animation:none}}
+
+  /* ---------- Stage layout ---------- */
+  .stage{
+    min-height:100%;
+    display:flex;align-items:center;justify-content:center;
+    padding:96px 20px 48px;
+  }
+  .stage.room-mode{
+    padding:0;align-items:stretch;justify-content:stretch;
+    background:var(--room);
+  }
+
+  /* ---------- Lobby card ---------- */
+  .lobby{
+    width:100%;max-width:920px;
+    display:grid;grid-template-columns:1.1fr .9fr;
+    background:#fff;border:1px solid var(--stone-200);border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 24px 60px -30px rgba(23,23,23,.25);
+  }
+  .lobby-main{padding:48px 44px}
+  .eyebrow{
+    font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--stone-600);margin-bottom:14px;
+  }
+  .eyebrow b{color:var(--ink)}
+  .lobby h1{
+    font-family:'Archivo',sans-serif;font-weight:800;
+    font-size:clamp(26px,4vw,34px);line-height:1.12;letter-spacing:-.01em;
+    margin-bottom:12px;
+  }
+  .lobby h1 em{font-style:normal;color:var(--gold);-webkit-text-stroke:1px var(--ink)}
+  .lobby p.lede{font-size:15px;line-height:1.6;color:var(--stone-600);margin-bottom:28px}
+
+  label{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:8px}
+  input[type=text]{
+    width:100%;padding:14px 16px;font:inherit;font-size:15px;
+    border:1.5px solid var(--stone-200);border-radius:10px;background:var(--stone);
+    outline:none;transition:border-color .15s;
+  }
+  input[type=text]:focus{border-color:var(--ink)}
+  .join-btn{
+    margin-top:16px;width:100%;
+    padding:15px 20px;border:none;border-radius:10px;cursor:pointer;
+    background:var(--gold);color:var(--ink);
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;letter-spacing:.01em;
+    transition:transform .12s,box-shadow .12s;
+  }
+  .join-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px -10px rgba(250,204,21,.7)}
+  .join-btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .join-btn[disabled]{opacity:.55;cursor:wait;transform:none;box-shadow:none}
+  .fineprint{margin-top:14px;font-size:12px;color:var(--stone-400);line-height:1.5}
+  .error{
+    display:none;margin-top:14px;padding:12px 14px;border-radius:10px;
+    background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px;line-height:1.5;
+  }
+  .error.show{display:block}
+
+  /* ---------- Setup panel (right side of lobby) ---------- */
+  .lobby-side{
+    background:var(--ink);color:#fff;
+    padding:48px 40px;
+    display:flex;flex-direction:column;gap:22px;
+  }
+  .lobby-side h2{
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:13px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+  }
+  .prep{display:flex;gap:14px;align-items:flex-start}
+  .prep .tick{
+    flex:none;width:22px;height:22px;border-radius:50%;
+    background:var(--gold);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:800;
+  }
+  .prep p{font-size:13.5px;line-height:1.55;color:#d6d3d1}
+  .prep p b{color:#fff}
+  .lobby-side .tagline{
+    margin-top:auto;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);
+    font-family:'Archivo',sans-serif;font-weight:600;font-size:14px;color:var(--stone-400);
+  }
+  .lobby-side .tagline em{font-style:normal;color:var(--gold)}
+
+  /* ---------- Call frame ---------- */
+  #call-frame-wrap{
+    display:none;position:fixed;inset:52px 0 0 0;background:var(--room);
+  }
+  #call-frame-wrap iframe{border:0}
+
+  /* ---------- Post-call ---------- */
+  .post{
+    display:none;width:100%;max-width:560px;text-align:center;
+    background:#fff;border:1px solid var(--stone-200);border-radius:20px;
+    padding:56px 44px;
+    box-shadow:0 24px 60px -30px rgba(23,23,23,.25);
+  }
+  .post h1{font-family:'Archivo',sans-serif;font-weight:800;font-size:28px;margin:18px 0 10px}
+  .post p{font-size:15px;line-height:1.6;color:var(--stone-600);margin-bottom:28px}
+  .post .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-block;padding:13px 24px;border-radius:10px;text-decoration:none;
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:14px;
+  }
+  .btn.gold{background:var(--gold);color:var(--ink)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--stone-200)}
+  .btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+  footer{
+    position:fixed;bottom:0;left:0;right:0;
+    padding:10px 20px;text-align:center;
+    font-size:11px;color:var(--stone-400);
+    pointer-events:none;
+  }
+  .stage.room-mode ~ footer{display:none}
+
+  @media (max-width:760px){
+    .lobby{grid-template-columns:1fr}
+    .lobby-main{padding:36px 26px}
+    .lobby-side{padding:32px 26px}
+    .stage{padding:80px 14px 40px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="/">
+    <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true">
+      <polygon points="24,3 43,13.5 43,34.5 24,45 5,34.5 5,13.5" fill="#facc15"/>
+      <polygon points="24,7 39.5,15.5 39.5,32.5 24,41 8.5,32.5 8.5,15.5" fill="#171717"/>
+      <text x="24" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#facc15" font-family="Georgia,serif">DMR</text>
+    </svg>
+    <span>Dynamic Muscle Recovery</span>
+  </a>
+  <div class="session-tag">
+    <span id="session-status">Virtual session</span>
+    <span class="live-dot" id="live-dot"></span>
+  </div>
+</header>
+
+<main class="stage" id="stage">
+
+  <!-- ============ LOBBY ============ -->
+  <section class="lobby" id="lobby" aria-label="Join your session">
+    <div class="lobby-main">
+      <p class="eyebrow"><b>DMR</b> · Virtual 1:1</p>
+      <h1>Your session starts <em>here</em>.</h1>
+      <p class="lede">Enter your name and join when you're ready. Derrick will meet you in the room at your scheduled time.</p>
+
+      <label for="client-name">Your name</label>
+      <input type="text" id="client-name" placeholder="First name is fine" autocomplete="name" maxlength="60">
+      <button class="join-btn" id="join-btn" onclick="joinSession()">Join session</button>
+
+      <div class="error" id="join-error" role="alert"></div>
+
+      <p class="fineprint">Your browser will ask for camera and microphone access — allow both. Nothing is recorded unless we agree to it in session.</p>
+    </div>
+
+    <aside class="lobby-side" aria-label="Before we start">
+      <h2>Before we start</h2>
+      <div class="prep">
+        <span class="tick">1</span>
+        <p><b>Frame your whole body.</b> Prop your phone or laptop back far enough that I can see you standing, head to feet. Movement tells the story.</p>
+      </div>
+      <div class="prep">
+        <span class="tick">2</span>
+        <p><b>Clear some floor space.</b> Enough to stand, hinge, and get on the ground. This is a working session, not a talking one.</p>
+      </div>
+      <div class="prep">
+        <span class="tick">3</span>
+        <p><b>Wear clothes you can move in.</b> If I can see the joint, I can read it.</p>
+      </div>
+      <p class="tagline">Pain isn't random—it has a root. <em>I find it. I fix it.</em></p>
+    </aside>
+  </section>
+
+  <!-- ============ POST-CALL ============ -->
+  <section class="post" id="post">
+    <svg viewBox="0 0 48 48" width="52" height="52" aria-hidden="true">
+      <polygon points="24,3 43,13.5 43,34.5 24,45 5,34.5 5,13.5" fill="#facc15"/>
+      <polygon points="24,7 39.5,15.5 39.5,32.5 24,41 8.5,32.5 8.5,15.5" fill="#171717"/>
+      <text x="24" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#facc15" font-family="Georgia,serif">DMR</text>
+    </svg>
+    <h1>Session ended</h1>
+    <p>Good work today. Your follow-up drills and next steps will land the way we discussed in session.</p>
+    <div class="actions">
+      <a class="btn gold" href="/">Back to DMR</a> <!-- TODO: main site URL -->
+      <button class="btn ghost" onclick="location.reload()">Rejoin room</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ CALL FRAME ============ -->
+<div id="call-frame-wrap"></div>
+
+<footer>Dynamic Muscle Recovery · Los Angeles, CA</footer>
+
+<script>
+/* =====================================================
+   DMR VIRTUAL SESSION — CONFIG
+   1. Create a free account at dashboard.daily.co
+   2. Your Daily domain will look like:  dmr.daily.co
+   3. Create a room (e.g. "session-1") in the dashboard
+      — set it to private + owner-only-broadcast OFF,
+      knock/waiting room ON if you want a lobby gate.
+   4. Fill in the two values below and deploy.
+   Clients can be sent links like:
+     dynamicmusclerecovery.com/session.html?room=session-1
+   ===================================================== */
+const DAILY_DOMAIN = "drob.daily.co";              // Derrick's Daily domain
+const DEFAULT_ROOM = "VirtualSession";             // Derrick's Daily room
+
+let callFrame = null;
+
+function roomUrl(){
+  const params = new URLSearchParams(location.search);
+  const room = (params.get("room") || DEFAULT_ROOM).replace(/[^a-zA-Z0-9-_]/g,"");
+  return `https://${DAILY_DOMAIN}/${room}`;
+}
+
+function showError(msg){
+  const el = document.getElementById("join-error");
+  el.textContent = msg;
+  el.classList.add("show");
+  const btn = document.getElementById("join-btn");
+  btn.disabled = false;
+  btn.textContent = "Join session";
+}
+
+async function joinSession(){
+  const btn = document.getElementById("join-btn");
+  const name = document.getElementById("client-name").value.trim();
+
+  if(!name){ showError("Enter your name so Derrick knows who's in the room."); return; }
+  if(DAILY_DOMAIN.startsWith("YOUR-")){
+    showError("This room isn't configured yet. (Site owner: set DAILY_DOMAIN in session.html.)");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Connecting…";
+  document.getElementById("join-error").classList.remove("show");
+
+  const wrap = document.getElementById("call-frame-wrap");
+  callFrame = window.DailyIframe ? window.DailyIframe.createFrame(wrap, frameOptions())
+            : window.Daily.createFrame(wrap, frameOptions());
+
+  callFrame
+    .on("joined-meeting", onJoined)
+    .on("left-meeting", onLeft)
+    .on("error", e => {
+      teardown();
+      showError("Couldn't connect to the session room. Check your link, or refresh and try again.");
+      console.error(e);
+    });
+
+  try{
+    await callFrame.join({ url: roomUrl(), userName: name });
+  }catch(err){
+    teardown();
+    showError("Couldn't connect to the session room. Check your link, or refresh and try again.");
+    console.error(err);
+  }
+}
+
+function frameOptions(){
+  return {
+    iframeStyle: { position:"absolute", inset:"0", width:"100%", height:"100%" },
+    showLeaveButton: true,
+    showFullscreenButton: true,
+    theme: {
+      colors: {
+        accent: "#facc15",
+        accentText: "#171717",
+        background: "#0c0c0c",
+        backgroundAccent: "#171717",
+        baseText: "#fafaf9",
+        border: "#292524",
+        mainAreaBg: "#0c0c0c",
+        mainAreaBgAccent: "#171717",
+        mainAreaText: "#fafaf9",
+        supportiveText: "#a8a29e"
+      }
+    }
+  };
+}
+
+function onJoined(){
+  document.getElementById("lobby").style.display = "none";
+  document.getElementById("stage").classList.add("room-mode");
+  document.getElementById("call-frame-wrap").style.display = "block";
+  document.getElementById("session-status").textContent = "Live";
+  document.getElementById("live-dot").classList.add("on");
+}
+
+function onLeft(){
+  teardown();
+  document.getElementById("stage").classList.remove("room-mode");
+  document.getElementById("lobby").style.display = "none";
+  document.getElementById("post").style.display = "block";
+  document.getElementById("session-status").textContent = "Session ended";
+  document.getElementById("live-dot").classList.remove("on");
+}
+
+function teardown(){
+  if(callFrame){ try{ callFrame.destroy(); }catch(e){} callFrame = null; }
+  document.getElementById("call-frame-wrap").style.display = "none";
+}
+
+document.getElementById("client-name").addEventListener("keydown", e => {
+  if(e.key === "Enter") joinSession();
+});
+</script>
+</body>
+</html>

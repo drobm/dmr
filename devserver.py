@@ -17,6 +17,7 @@ What it fakes:
   * profiles / plans / sessions live in memory and vanish on
     restart. Enough to click through every screen.
   * magic links are printed to this terminal instead of emailed.
+  * clean URLs are emulated, matching vercel.json.
 """
 
 import json
@@ -155,6 +156,13 @@ class Handler(SimpleHTTPRequestHandler):
         if path.startswith("/api/"):
             return self.send_json(405, {"error": "Method not allowed"})
 
+        # Emulate Vercel's cleanUrls: /intake serves intake.html, so
+        # local routing matches production instead of 404ing.
+        if path != "/" and not os.path.splitext(path)[1]:
+            candidate = os.path.join(ROOT, path.lstrip("/") + ".html")
+            if os.path.isfile(candidate):
+                self.path = path + ".html"
+
         return super().do_GET()
 
     def do_POST(self):
@@ -201,7 +209,7 @@ class Handler(SimpleHTTPRequestHandler):
             email = (body.get("email") or "").strip().lower()
             token = uuid.uuid4().hex
             TOKENS[token] = email
-            print(f"\n  *** MAGIC LINK for {email}:\n      http://localhost:{PORT}/?token={token}\n", flush=True)
+            print(f"\n  *** MAGIC LINK for {email}:\n      http://localhost:{PORT}/relief-plan?token={token}\n", flush=True)
             return self.send_json(200, {"sent": True})
 
         return self.send_json(404, {"error": "Not found"})

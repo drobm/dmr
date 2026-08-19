@@ -46,6 +46,15 @@ function icon(name, cls = "") {
     stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true">${ICON_PATHS[name] || ""}</svg>`;
 }
 
+/* Open external destinations in a new tab, but keep navigation
+   inside the site in the same tab — /intake is now a page on this
+   site, and spawning a tab for it fragments the funnel (and piles
+   up tabs on mobile Safari). Works either way, so the links in
+   config.js can be swapped between internal and external freely. */
+function linkTarget(url) {
+  return /^https?:\/\//i.test(url) ? ' target="_blank" rel="noreferrer"' : "";
+}
+
 const TIKTOK_ICON = (cls) =>
   `<svg viewBox="0 0 24 24" fill="currentColor" class="${cls}" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>`;
 
@@ -208,13 +217,13 @@ function upsellCards() {
     <div class="bg-neutral-800 rounded-xl p-5 flex flex-col">
       <h4 class="font-bold text-yellow-400">Virtual 1:1 Session</h4>
       <p class="text-sm text-neutral-300 mt-1 flex-1">Work with me live on your exact issue — targeted mobility and pain relief, built around your body.</p>
-      <a href="${esc(NEXT_STEPS.virtualSession)}" target="_blank" rel="noreferrer"
+      <a href="${esc(NEXT_STEPS.virtualSession)}"${linkTarget(NEXT_STEPS.virtualSession)}
         class="mt-4 block text-center bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-bold py-2.5 rounded-lg transition-colors">Book a Session</a>
     </div>
     <div class="bg-neutral-800 rounded-xl p-5 flex flex-col">
       <h4 class="font-bold text-yellow-400">Online Exercise Library</h4>
       <p class="text-sm text-neutral-300 mt-1 flex-1">Follow my full programs on your own schedule — guided routines for every area, updated monthly.</p>
-      <a href="${esc(NEXT_STEPS.library)}" target="_blank" rel="noreferrer"
+      <a href="${esc(NEXT_STEPS.library)}"${linkTarget(NEXT_STEPS.library)}
         class="mt-4 block text-center bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-bold py-2.5 rounded-lg transition-colors">Explore Programs</a>
     </div>
   </div>`;
@@ -249,14 +258,14 @@ function leadCaptureForm() {
 function header() {
   return `<header class="bg-neutral-900 sticky top-0 z-20">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
+      <a href="/" class="flex items-center gap-3" aria-label="Dynamic Muscle Recovery — home">
         <svg viewBox="0 0 48 48" class="w-10 h-10" aria-hidden="true">
           <polygon points="24,3 43,13.5 43,34.5 24,45 5,34.5 5,13.5" fill="#facc15"></polygon>
           <polygon points="24,7 39.5,15.5 39.5,32.5 24,41 8.5,32.5 8.5,15.5" fill="#171717"></polygon>
           <text x="24" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#facc15" font-family="Georgia, serif">DMR</text>
         </svg>
         <span class="text-white font-bold text-lg tracking-tight">Pain Relief Guide</span>
-      </div>
+      </a>
       <div class="flex items-center gap-3">
         <a href="${esc(SOCIAL.instagram)}" target="_blank" rel="noreferrer" aria-label="Instagram" class="text-neutral-400 hover:text-yellow-400 transition-colors">${icon("Instagram", "w-5 h-5")}</a>
         <a href="${esc(SOCIAL.tiktok)}" target="_blank" rel="noreferrer" aria-label="TikTok" class="text-neutral-400 hover:text-yellow-400 transition-colors">${TIKTOK_ICON("w-5 h-5")}</a>
@@ -422,7 +431,7 @@ function pagePlan() {
     ${state.redFlag ? `<div class="mt-5 bg-neutral-900 rounded-2xl p-6">
         <h2 class="text-yellow-400 font-bold text-lg">This deserves proper attention</h2>
         <p class="text-neutral-300 text-sm mt-2">Numbness, tingling, or radiating pain usually means the root is upstream of where you feel it. The plan below is a safe starting point — but this is exactly what a guided 1:1 session is for. Let's find the root together.</p>
-        <a href="${esc(NEXT_STEPS.virtualSession)}" target="_blank" rel="noreferrer" class="mt-4 inline-block bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-bold px-6 py-3 rounded-lg transition-colors">Book a Virtual 1:1 Session</a>
+        <a href="${esc(NEXT_STEPS.virtualSession)}"${linkTarget(NEXT_STEPS.virtualSession)} class="mt-4 inline-block bg-yellow-400 hover:bg-yellow-500 text-neutral-900 font-bold px-6 py-3 rounded-lg transition-colors">Book a Virtual 1:1 Session</a>
       </div>` : ""}
     <div class="mt-6 space-y-5">${sections}</div>
     ${p.tips ? `<div class="mt-6 bg-yellow-50 border border-yellow-300 rounded-2xl px-5 py-4">

@@ -17,6 +17,11 @@ const { sendMagicLink } = require("./_email.js");
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TOKEN_MINUTES = 15;
 
+/* The guide lives at /relief-plan; "/" is the marketing home.
+   Sign-in links must land on the guide, so keep this in step with
+   the filename of public/relief-plan.html if the route changes. */
+const APP_PATH = "/relief-plan";
+
 const hash = (t) => crypto.createHash("sha256").update(t).digest("hex");
 
 function baseUrl(req) {
@@ -48,7 +53,10 @@ module.exports = async function handler(req, res) {
       // Housekeeping: drop tokens that expired over a day ago.
       await query("DELETE FROM login_tokens WHERE expires_at < now() - interval '1 day'");
 
-      await sendMagicLink({ email, url: `${baseUrl(req)}/?token=${encodeURIComponent(token)}` });
+      await sendMagicLink({
+        email,
+        url: `${baseUrl(req)}${APP_PATH}?token=${encodeURIComponent(token)}`,
+      });
     } catch (err) {
       console.error("Magic link failed:", err);
       return json(res, 500, { error: "Couldn't send the link right now." });

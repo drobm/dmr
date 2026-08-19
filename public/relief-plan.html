@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pain Relief Guide — Dynamic Muscle Recovery</title>
+<meta name="description" content="Pain isn't random — it has a root. Tap where it hurts and get a targeted relief plan in seconds.">
+<meta name="theme-color" content="#171717">
+
+<!-- Traffic arrives almost entirely from Instagram and TikTok bio
+     links, so the share card matters as much as the page. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pain Relief Guide — Dynamic Muscle Recovery">
+<meta property="og:description" content="Where massage stops, I start. Tap where it hurts and get a targeted relief plan in seconds.">
+<meta property="og:image" content="/images/anterior-view.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
+
+<!-- Brand type. The only external request the app makes; see
+     README ("Self-hosting the fonts") to remove it entirely. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="root"></div>
+
+<noscript>
+  <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;color:#171717">
+    <h1 style="font-size:20px">Pain Relief Guide</h1>
+    <p style="color:#525252">This guide needs JavaScript enabled to build your plan.
+    Turn it on and reload, or reach out on Instagram and I'll walk you through it directly.</p>
+  </div>
+</noscript>
+
+<script>
+/* If a script fails to parse, show something human instead of a
+   blank page — this app's visitors arrive from a bio link and
+   will not open a console. */
+window.addEventListener("error", function (e) {
+  var el = document.getElementById("root");
+  if (el && el.children.length === 0) {
+    el.innerHTML = '<div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif">' +
+      '<h1 style="font-size:20px;color:#171717">Something went wrong loading the guide</h1>' +
+      '<p style="color:#525252;font-size:14px">Please refresh the page. If it keeps happening, message me on Instagram and I\'ll sort you out.</p>' +
+      '<p style="color:#a3a3a3;font-size:12px;margin-top:16px;font-family:monospace">' + (e.message || "") + '</p></div>';
+  }
+});
+</script>
+
+<script src="/config.js"></script>
+<script src="/data.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

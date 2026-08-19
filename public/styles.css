@@ -24,6 +24,10 @@ body {
   background-color: #fafaf9;
 }
 img, svg, video { display: block; max-width: 100%; }
+/* Links inherit their surroundings and carry no underline, matching
+   the marketing site. Without this, gold CTA buttons built from <a>
+   render with a default blue underline. */
+a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
 input, textarea { font: inherit; }
 h1, h2, h3, h4 { font-family: Archivo, Inter, sans-serif; font-size: inherit; font-weight: inherit; }

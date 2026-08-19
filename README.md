@@ -1,11 +1,22 @@
-# Pain Relief Guide — Dynamic Muscle Recovery
+# Dynamic Muscle Recovery — website + Pain Relief Guide
 
-Lead-generation web app. A visitor taps where it hurts (or describes it),
-answers three questions, and gets a targeted exercise plan. The first
-exercise per area is free; the rest unlock when they create a profile —
-which is how the lead gets captured.
+The marketing site and the Pain Relief Guide in one deployment, one
+domain, one repo. Previously two separate Vercel projects.
 
-**Live:** https://app.dynamicmusclerecovery.com _(after the DNS step below)_
+**Live:** https://dynamicmusclerecovery.com _(after the DNS step below)_
+
+## Routes
+
+| Route | What it is |
+|---|---|
+| `/` | Marketing home. Hero, services, about, FAQ. |
+| `/relief-plan` | The Pain Relief Guide — the free tool the CTAs point at. |
+| `/intake` | New-client intake form → Make.com → Airtable CRM → AI welcome email. |
+| `/inquiry` | Short lead qualifier → Make.com → Claude scoring → tiered reply. |
+| `/session` | Branded virtual session room (Daily.co). |
+
+Every CTA on the marketing site now points at an internal route. Nothing
+links out to a separate deployment any more.
 
 ---
 
@@ -28,21 +39,33 @@ in the browser, and Vercel installs their dependencies for you.
 
 | I want to change... | Edit this file |
 |---|---|
-| Instagram / TikTok links, My PT Hub links | `public/config.js` |
+| Marketing home page (hero, services, FAQ) | `public/index.html` |
+| Intake form | `public/intake.html` |
+| Inquiry form | `public/inquiry.html` |
+| Virtual session room | `public/session.html` |
+| Where the guide's buttons send people | `public/config.js` |
 | Exercise names, doses, coaching cues | `public/data.js` |
 | Any wording on any screen | `public/app.js` |
 | Colors, fonts, spacing | `public/styles.css` |
 | Add exercise photos/videos | drop files in `public/media/` — no code change |
 
-**`public/config.js` is the one to start with.** It holds the four
-placeholder links, each marked `TODO(derrick)`:
+**`public/config.js`** controls where the guide's buttons send people.
+Everything in it is filled in and live:
 
 ```js
-SOCIAL.instagram      // your real IG URL
-SOCIAL.tiktok         // your real TikTok URL
-NEXT_STEPS.virtualSession  // My PT Hub booking URL
-NEXT_STEPS.library         // My PT Hub program library URL
+SOCIAL.instagram / SOCIAL.tiktok   // instagram.com/derrick.dynamic, etc.
+NEXT_STEPS.virtualSession          // "/intake"
+NEXT_STEPS.library                 // "/intake"
 ```
+
+Both `NEXT_STEPS` links point at the intake form, matching the "Book a
+Session" and "Explore Programs" buttons on the marketing site — so every
+route into paid work lands in the same Airtable pipeline. If you later
+want "Explore Programs" to go straight to the My PT Hub library, put that
+URL in `library`; external links automatically open in a new tab.
+
+The social handles appear in two places — `config.js` for the guide and
+`public/index.html` for the marketing footer. Change both together.
 
 Never put an API key or password in `public/` — everything in that
 folder is downloadable by anyone who visits the site.
@@ -113,7 +136,7 @@ Project → Settings → Environment Variables:
 | `AUTH_SECRET` | Run `openssl rand -base64 32` and paste the result |
 | `LEAD_ALERT_TO` | The inbox where new-lead emails should land |
 | `EMAIL_FROM` | `Pain Relief Guide <hello@dynamicmusclerecovery.com>` |
-| `PUBLIC_BASE_URL` | `https://app.dynamicmusclerecovery.com` |
+| `PUBLIC_BASE_URL` | `https://dynamicmusclerecovery.com` |
 
 Then redeploy once (Deployments → ⋯ → Redeploy) so they take effect.
 
@@ -121,11 +144,14 @@ Then redeploy once (Deployments → ⋯ → Redeploy) so they take effect.
 > verify one, leave it unset — the default only delivers to your own
 > address, which is fine for testing but won't reach customers.
 
-**6. Point the subdomain at it**
+**6. Point the domain at it**
 
-- Vercel → Project → Settings → Domains → add `app.dynamicmusclerecovery.com`
+- Vercel → Project → Settings → Domains → add `dynamicmusclerecovery.com`
 - Vercel shows you a CNAME record
-- Wix → Domains → DNS → add that CNAME
+- Wix → Domains → DNS → add that record
+- If you still have the old `app.dynamicmusclerecovery.com` subdomain
+  pointing at the previous deployment, redirect it to
+  `dynamicmusclerecovery.com/relief-plan` so old links keep working
 - Wait a few minutes for DNS to propagate
 
 ### Everyday updates
@@ -161,7 +187,8 @@ So you can ship after step 2 and add the rest as you go.
 python3 devserver.py
 ```
 
-Then open http://localhost:8000.
+Then open http://localhost:8000. All five routes work locally, including
+clean URLs.
 
 `devserver.py` is a local-only stand-in for the `api/` functions so the
 whole interface can be clicked through on a machine without Node. It
@@ -178,8 +205,12 @@ It is not deployed and has no effect on the live site.
 
 ```
 public/            ← everything the browser downloads
-  index.html
-  config.js        ← your links and handles (edit me first)
+  index.html       ← marketing home ("/")
+  intake.html      ← "/intake"
+  inquiry.html     ← "/inquiry"
+  session.html     ← "/session"
+  relief-plan.html ← the guide ("/relief-plan")
+  config.js        ← the guide's links and handles
   data.js          ← the 56 exercises + body-diagram hotspots
   app.js           ← all screens and interaction logic
   styles.css       ← the design system
