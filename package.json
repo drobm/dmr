@@ -1,0 +1,12 @@
+{
+  "name": "dmr-pain-relief",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pain Relief Guide — Dynamic Muscle Recovery",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.0",
+    "pg": "^8.13.1",
+    "resend": "^4.0.1"
+  }
+}

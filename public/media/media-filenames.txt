@@ -1,0 +1,226 @@
+EXERCISE MEDIA FILENAMES — drop into /public/media/
+==================================================
+
+Chin Tucks
+  photo: chin-tucks.jpg
+  video: chin-tucks.mp4
+
+Levator Scapulae Stretch
+  photo: levator-scapulae-stretch.jpg
+  video: levator-scapulae-stretch.mp4
+
+Upper Trap Stretch
+  photo: upper-trap-stretch.jpg
+  video: upper-trap-stretch.mp4
+
+Neck Isometric Holds
+  photo: neck-isometric-holds.jpg
+  video: neck-isometric-holds.mp4
+
+Band Pull-Aparts
+  photo: band-pull-aparts.jpg
+  video: band-pull-aparts.mp4
+
+Wall Slides
+  photo: wall-slides.jpg
+  video: wall-slides.mp4
+
+Banded External Rotation
+  photo: banded-external-rotation.jpg
+  video: banded-external-rotation.mp4
+
+Scapular Push-Ups
+  photo: scapular-push-ups.jpg
+  video: scapular-push-ups.mp4
+
+Sleeper Stretch
+  photo: sleeper-stretch.jpg
+  video: sleeper-stretch.mp4
+
+Doorway Pec Stretch
+  photo: doorway-pec-stretch.jpg
+  video: doorway-pec-stretch.mp4
+
+Pec Foam Roll / Ball Release
+  photo: pec-foam-roll-ball-release.jpg
+  video: pec-foam-roll-ball-release.mp4
+
+Floor Angels
+  photo: floor-angels.jpg
+  video: floor-angels.mp4
+
+Open Book Stretch
+  photo: open-book-stretch.jpg
+  video: open-book-stretch.mp4
+
+Thoracic Extension over Foam Roller
+  photo: thoracic-extension-over-foam-roller.jpg
+  video: thoracic-extension-over-foam-roller.mp4
+
+Cat-Cow
+  photo: cat-cow.jpg
+  video: cat-cow.mp4
+
+Thread the Needle
+  photo: thread-the-needle.jpg
+  video: thread-the-needle.mp4
+
+Prone Y Raises
+  photo: prone-y-raises.jpg
+  video: prone-y-raises.mp4
+
+Dead Hang
+  photo: dead-hang.jpg
+  video: dead-hang.mp4
+
+McGill Curl-Up
+  photo: mcgill-curl-up.jpg
+  video: mcgill-curl-up.mp4
+
+Bird Dog
+  photo: bird-dog.jpg
+  video: bird-dog.mp4
+
+Side Plank
+  photo: side-plank.jpg
+  video: side-plank.mp4
+
+Child's Pose Reach
+  photo: child-s-pose-reach.jpg
+  video: child-s-pose-reach.mp4
+
+Hip Hinge Drill
+  photo: hip-hinge-drill.jpg
+  video: hip-hinge-drill.mp4
+
+Eccentric Wrist Extensions
+  photo: eccentric-wrist-extensions.jpg
+  video: eccentric-wrist-extensions.mp4
+
+Eccentric Wrist Curls
+  photo: eccentric-wrist-curls.jpg
+  video: eccentric-wrist-curls.mp4
+
+Forearm Foam Roll / Ball Release
+  photo: forearm-foam-roll-ball-release.jpg
+  video: forearm-foam-roll-ball-release.mp4
+
+Hammer Rotations
+  photo: hammer-rotations.jpg
+  video: hammer-rotations.mp4
+
+Wrist Flexor Stretch
+  photo: wrist-flexor-stretch.jpg
+  video: wrist-flexor-stretch.mp4
+
+Wrist Extensor Stretch
+  photo: wrist-extensor-stretch.jpg
+  video: wrist-extensor-stretch.mp4
+
+Wrist CARs
+  photo: wrist-cars.jpg
+  video: wrist-cars.mp4
+
+Finger Extensions with Band
+  photo: finger-extensions-with-band.jpg
+  video: finger-extensions-with-band.mp4
+
+Dead Bug
+  photo: dead-bug.jpg
+  video: dead-bug.mp4
+
+Front Plank
+  photo: front-plank.jpg
+  video: front-plank.mp4
+
+Pallof Press
+  photo: pallof-press.jpg
+  video: pallof-press.mp4
+
+Hollow Hold
+  photo: hollow-hold.jpg
+  video: hollow-hold.mp4
+
+Couch Stretch
+  photo: couch-stretch.jpg
+  video: couch-stretch.mp4
+
+90/90 Hip Switches
+  photo: 90-90-hip-switches.jpg
+  video: 90-90-hip-switches.mp4
+
+Pigeon Stretch
+  photo: pigeon-stretch.jpg
+  video: pigeon-stretch.mp4
+
+Banded Hip Flexor March
+  photo: banded-hip-flexor-march.jpg
+  video: banded-hip-flexor-march.mp4
+
+World's Greatest Stretch
+  photo: world-s-greatest-stretch.jpg
+  video: world-s-greatest-stretch.mp4
+
+Glute Bridge
+  photo: glute-bridge.jpg
+  video: glute-bridge.mp4
+
+Clamshells
+  photo: clamshells.jpg
+  video: clamshells.mp4
+
+Single-Leg Glute Bridge
+  photo: single-leg-glute-bridge.jpg
+  video: single-leg-glute-bridge.mp4
+
+Fire Hydrants
+  photo: fire-hydrants.jpg
+  video: fire-hydrants.mp4
+
+Hamstring Sliders
+  photo: hamstring-sliders.jpg
+  video: hamstring-sliders.mp4
+
+Light Romanian Deadlift
+  photo: light-romanian-deadlift.jpg
+  video: light-romanian-deadlift.mp4
+
+Standing Hamstring Stretch
+  photo: standing-hamstring-stretch.jpg
+  video: standing-hamstring-stretch.mp4
+
+Nordic Curl Negatives
+  photo: nordic-curl-negatives.jpg
+  video: nordic-curl-negatives.mp4
+
+Terminal Knee Extensions
+  photo: terminal-knee-extensions.jpg
+  video: terminal-knee-extensions.mp4
+
+Spanish Squat
+  photo: spanish-squat.jpg
+  video: spanish-squat.mp4
+
+Quad Foam Rolling
+  photo: quad-foam-rolling.jpg
+  video: quad-foam-rolling.mp4
+
+Step-Downs
+  photo: step-downs.jpg
+  video: step-downs.mp4
+
+Calf Raises (Straight + Bent Knee)
+  photo: calf-raises-straight-bent-knee.jpg
+  video: calf-raises-straight-bent-knee.mp4
+
+Tibialis Raises
+  photo: tibialis-raises.jpg
+  video: tibialis-raises.mp4
+
+Plantar Fascia Ball Rolling
+  photo: plantar-fascia-ball-rolling.jpg
+  video: plantar-fascia-ball-rolling.mp4
+
+Ankle Dorsiflexion Rocks
+  photo: ankle-dorsiflexion-rocks.jpg
+  video: ankle-dorsiflexion-rocks.mp4
