@@ -19,7 +19,16 @@ const esc = (s) =>
 
 async function notifyNewLead({ name, email, handle, phone, plan }) {
   const r = client();
-  if (!r || !ALERT_TO) return;
+  if (!r || !ALERT_TO) {
+    // Silent by design (a missing mailer must never block lead capture),
+    // but silence with no trace makes this exact case unfixable from the
+    // logs alone. This line is the fix for that.
+    console.warn(
+      "Lead alert email skipped —",
+      !r ? "RESEND_API_KEY is not set." : "LEAD_ALERT_TO is not set."
+    );
+    return;
+  }
 
   const areas = plan && Array.isArray(plan.plan)
     ? plan.plan.map((s) => s.area).join(", ")
