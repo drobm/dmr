@@ -164,6 +164,24 @@ git push
 
 That's the whole loop. Vercel builds and deploys within a minute.
 
+**Two git remotes exist on purpose.** `origin` points to `drobm/dmr` and
+`deploy` points to `drobm/dmr-master` — the repo Vercel's project is
+actually connected to. Push to both:
+
+```bash
+git push origin main
+git push deploy main
+```
+
+This exists because the two repos briefly diverged during setup; keeping
+both in sync avoids that happening again. If Vercel ever stops
+auto-deploying on push, force a build directly with the project's deploy
+hook (Settings → Git → Deploy Hooks) instead of guessing why:
+
+```bash
+curl -X POST "<deploy hook URL>"
+```
+
 ---
 
 ## What happens if something isn't set up
