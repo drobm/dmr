@@ -66,10 +66,18 @@ module.exports = async function handler(req, res) {
 
     setSessionCookie(res, profile.id);
 
-    // Fire-and-forget so a slow mail API doesn't hold up the response.
-    notifyNewLead({ name, email, handle, phone, plan }).catch((e) =>
-      console.error("Lead alert email failed:", e && e.message)
-    );
+    // Awaited deliberately: a fire-and-forget call here can get frozen
+    // mid-flight the instant the response below is sent, since a
+    // serverless instance may suspend as soon as the handler returns —
+    // silently killing the email before it ever reaches Resend. Awaiting
+    // adds a few hundred ms to this request, which is an acceptable
+    // trade for the alert actually going out. Still never blocks lead
+    // capture itself: any failure is caught and logged, not thrown.
+    try {
+      await notifyNewLead({ name, email, handle, phone, plan });
+    } catch (e) {
+      console.error("Lead alert email failed:", e && e.message);
+    }
 
     return json(res, 200, { profile: rowToProfile(profile), plans: saved, persisted: true });
   } catch (err) {
